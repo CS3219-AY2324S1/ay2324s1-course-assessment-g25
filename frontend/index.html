@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PeerPrep</title>
+    <link rel="stylesheet" type="text/css" href="./css/styles.css">
+  </head>
+  <body>
+    <main>
+        <h1>Welcome to PeerPrep</h1> 
+
+        <h2>Add a new question</h2>
+        <div class="form-center">
+          <form id="questionForm">
+            <label for="questionTitle">Title:</label>
+            <input type="text" placeholder="Title" id="questionTitle" name="questionTitle" autocomplete="off" maxlength="100">
+            <br><br>
+            <label for="questionDescription">Description:</label>
+            <textarea placeholder="Description" id="questionDescription" name="questionDescription" wrap="soft" maxlength="700"></textarea>
+            <!-- <input type="text" placeholder="Description" id="questionDescription" name="questionDescription"> -->
+            <br><br>
+            <label for="questionComplexity">Complexity:</label>
+            <select name="questionComplexity" id="questionComplexity">
+              <option value="Easy">Easy</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
+            </select>
+            <br><br>
+            <label for="questionCategory">Category:</label>
+            <input type="text" placeholder="Category" id="questionCategory" name="questionCategory" autocomplete="off" maxlength="100">
+            <br><br>
+            <div class="button-container">
+              <button type="submit">Add Question</button>
+              <button id="clearAllButton" type="button">Clear All</button>
+            </div>
+            <!-- <button type="submit">Add Question</button>
+            <button id="clearAllButton" type="button">Clear All</button> -->
+          </form>
+        </div>
+
+        <!-- Add a modal for confirmation -->
+        <div id="confirmationModal" class="modal">
+          <div class="modal-content">
+              <p>Are you sure you want to delete this question?</p>
+              <button id="confirmDeleteButton">Yes</button>
+              <button id="cancelDeleteButton">No</button>
+          </div>
+        </div>
+
+        <div class="table-conatiner">
+          <table>
+            
+            <caption>
+              Questions
+            </caption>
+            <thead>
+              <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Complexity</th>
+                  <th>Category</th>
+                  <th>Delete</th>
+              </tr>
+          </thead>
+            <!-- This is where questions will be dynamically added -->
+            <tr>
+              <td class="question-id">${question.id}</td>
+              <td class="question-title">${question.title}</td>
+              <td>${question.complexity}</td>
+              <td>${question.category}</td>
+              <td>
+                  <button class="delete-button" data-index="${index}">Delete</button>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <div class="question-details" id="questionDetailsContainer">
+          <!-- Details of the selected question will be displayed here -->
+        </div>
+
+        <!-- Button to check local storage content -->
+        <div class="button-container">
+          <button id="checkLocalStorageButton">Check Local Storage in Console</button>
+      </div>
+
+    </main>
+	<script src="src/index.js"></script>
+  </body>
+</html>

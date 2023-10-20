@@ -1,0 +1,102 @@
+html { color-scheme: dark;}
+
+body {
+    color: #eee;
+    font-size: 1.125rem;
+    font-family: system-ui;
+    line-height: 1.5;
+}
+
+h1 {
+    text-align: center;
+    font-size: 3rem;
+    margin: 80px auto 80px auto;
+}
+
+h2 {
+    text-align: center;
+}
+
+.form-center {
+    display: flex;
+    justify-content: center;
+}
+
+.modal {
+    text-align: center;
+    display: none;
+}
+
+#questionDescription {
+    width: 100%; 
+    height: 150px; 
+    resize: vertical; 
+}
+
+input[type=text],
+select,
+button {
+    padding: 8px;
+    border:0;
+    border-radius:10px;
+    /* width: 200px; */
+}
+
+button {
+    margin-right: 20px;
+    padding: 10px 20px; 
+    background-color: #007bff;
+    color: #fff; 
+    border: none;
+    cursor: pointer;
+}
+
+table {
+    margin-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    border-collapse: collapse;
+    background: #323232;
+}
+
+caption,
+th,
+td {
+    padding: 1rem;
+}
+
+caption,
+th {
+    text-align: left;
+}
+
+caption {
+    background: hsl(0 0% 0%);
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+th {
+    background: hsl(0 0% 0% / 0.5);
+}
+
+tr:nth-of-type(2n) {
+    background: hsl(0 0% 0% / 0.1);
+}
+
+.button-container {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+#addQuestionButton, #clearAllButton, #checkLocalStorageButton {
+    padding: 10px 20px; 
+    background-color: #007bff; 
+    border: none; 
+    cursor: pointer;
+    margin-right: 10px;
+}
+

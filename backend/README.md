@@ -129,3 +129,126 @@ Run `npm test` to run all tests.
     "updatedAt": "2019-01-01T00:00:00.000Z"
 }
 ```
+
+### POST /api/v1/users
+
+#### Request
+
+##### Body
+
+```json
+{
+    "name": "bob", 
+    "email": "bob123@gmail.com", 
+    "password": "12345678", 
+    "password2": "12345678"
+}
+```
+
+#### Response
+
+##### Body
+
+```json
+{
+    "id": 1, 
+    "name": "bob", 
+    "email": "bob123@gmail.com", 
+    "password": "12345678"
+}
+```
+
+### GET /api/v1/users
+
+#### Response
+
+##### Body
+
+```json
+[
+    {
+        "id": "1",
+        "name": "bob",
+        "email": "bob123@mail.com",
+        "password": "bob123"
+    },
+    {
+        "id": "2",
+        "name": "Joe",
+        "email": "joe@gmail.com",
+        "password": "joepass"
+    },
+    ...
+]
+```
+
+### GET /api/v1/users/:userId
+
+#### Response
+
+##### Body
+
+```json
+{
+    "id": "1",
+    "name": "bob",
+    "email": "bob123@mail.com",
+    "password": "bob123"
+}
+```
+
+### GET /api/v1/users/byEmail/:email
+
+#### Response
+
+##### Body
+
+```json
+{
+    "id": "1",
+    "name": "bob",
+    "email": "bob123@mail.com",
+    "password": "bob123"
+}
+```
+
+### PUT /api/v1/users/:userId
+
+#### Request
+
+##### Body
+
+```json
+{
+    "name": "bobby",
+    "email": "bob123@mail.com",
+}
+```
+
+#### Response
+
+##### Body
+
+```json
+{
+    "id": 1, 
+    "name": "bobby", 
+    "email": "bob123@gmail.com", 
+    "password": "12345678"
+}
+```
+
+### DELETE /api/v1/users/usersId
+
+#### Response
+
+##### Body
+
+```json
+{
+    "id": 1, 
+    "name": "bob", 
+    "email": "bob123@gmail.com", 
+    "password": "12345678"
+}
+```

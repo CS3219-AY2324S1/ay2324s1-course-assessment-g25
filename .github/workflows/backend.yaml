@@ -10,7 +10,7 @@ on:
     branches: [ branch-* ]
   # Add the pull_request event, so that the workflow runs automatically every time a pull request is created or updated to merge with the main branch.
   pull_request:
-    branches: [ main ]
+    branches: [ master ]
 
 # The jobs key groups together all the jobs that run in the workflow file.
 jobs:

@@ -21,13 +21,15 @@
 
 import 'dotenv/config';
 import './data-sources/mongoose/connection.js';
-
+import cors from 'cors';
 import express from 'express';
 import questionRouter from './api/v1/questionRouter.js';
 import userRouter from './api/v1/userRouter.js';
 
 // Create an express app
 const app = express();
+
+app.use(cors());
 
 // Configure the app to parse requests with JSON payloads
 app.use(express.json());
