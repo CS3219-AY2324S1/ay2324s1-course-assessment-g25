@@ -18,7 +18,7 @@ RUN npm ci
 COPY . .
 
 # Expose front end port 3000.
-EXPOSE 3001
+EXPOSE 3000
 
 # Run the front end.
 CMD ["npm", "run", "dev"]
