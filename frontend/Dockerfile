@@ -3,7 +3,7 @@ FROM node:17-alpine
 WORKDIR /app
 
 # Copy package.json files into the container.
-COPY package.json .
+COPY package*.json ./
 
 # Copy .next files into the container.
 COPY .next /app/.next
@@ -16,6 +16,9 @@ RUN npm ci
 
 # Copy the rest of the source code into the container.
 COPY . .
+
+# Generate Prisma client code
+RUN npx prisma generate
 
 # Expose front end port 3000.
 EXPOSE 3000

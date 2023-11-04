@@ -44,3 +44,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ## Updating Schema via Prisma
 
 `npx prisma migrate dev`
+
+## Server Error related to Prisma Client
+
+`npx prisma generate`
