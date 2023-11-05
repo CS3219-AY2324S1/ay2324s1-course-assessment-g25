@@ -1,5 +1,7 @@
 FROM node:17-alpine
 
+RUN npm install -g nodemon
+
 WORKDIR /app
 
 # Copy package.json files into the container.
@@ -11,7 +13,7 @@ COPY .next /app/.next
 # Install dependencies.
 RUN npm install
 
-# CI mode
+# CI mode.
 RUN npm ci
 
 # Copy the rest of the source code into the container.

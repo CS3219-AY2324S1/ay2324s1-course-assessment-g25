@@ -3,7 +3,7 @@ FROM node:17-alpine
 WORKDIR /app
 
 # Copy package.json files into the container.
-COPY package.json .
+COPY package*.json ./
 
 # Copy .next files into the container.
 COPY .next /app/.next
@@ -17,8 +17,9 @@ RUN npm ci
 # Copy the rest of the source code into the container.
 COPY . .
 
-# Expose front end port 3000.
+
 # Liveblocks uses port 3000 for the front end.
+# But local host will use port 3001 for collaboration service.
 EXPOSE 3000
 
 # Run the front end.

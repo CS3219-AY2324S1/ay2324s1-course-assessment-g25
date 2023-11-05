@@ -18,7 +18,7 @@ services:
     build: ./collaboration-service
     container_name: collaboration_service_container
     ports:
-      - "3001:3001"
+      - "3001:3000"
     volumes:
       - ./collaboration-service:/app
 
@@ -42,7 +42,7 @@ services:
     build: ./matching-service
     container_name: matching_service_container
     ports:
-      - "8084:8084"
+      - "8088:8088"
     volumes:
       - ./matching-service:/app
 
