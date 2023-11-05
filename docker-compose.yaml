@@ -13,6 +13,12 @@ services:
       - ./frontend:/app
     stdin_open: true
     tty: true
+    environment:
+      - NEXTAUTH_URL=http://localhost:3000/api/auth
+      - NEXTAUTH_SECRET=wbb33dOF5jxX1s8Y7gXhEdIgD/zCzwRt659+0YIEgEo=
+      - GITHUB_ID=4e29058a74f57c9fd62a
+      - GITHUB_SECRET=18688aafe7221621dc420439cfe1ca753b9fb5c6
+
 
   collaboration-service:
     build: ./collaboration-service
@@ -29,6 +35,10 @@ services:
       - "8080:8080"
     volumes:
       - ./user-service:/app
+    environment:
+      - DATABASE_URL="postgres://postgres:group25@34.126.94.217:5432/postgres"=value
+    depends_on:
+      - frontend
 
   question-service:
     build: ./question-service
