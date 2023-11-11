@@ -22,9 +22,5 @@ export const SideBar = [
     {
         title:'Logout',
         path:'../sign_in',
-    },
-    {
-        title:'Delete Account',
-        path:'../sign_in',
     }
 ]
