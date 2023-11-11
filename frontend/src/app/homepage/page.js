@@ -5,6 +5,7 @@ import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import { SideBar } from '../../components/sideBar';
 import { IconContext } from 'react-icons/lib';
+import Modal from 'react-modal';
 
 export default function Homepage() {
     const [sidebar, setsidebar] = useState(false);
@@ -14,14 +15,44 @@ export default function Homepage() {
     const axios = require('axios');
     
     const Question = {
-        title: '',
-        complexity: '',
-        category: '',
+        "owner": "Dummy", 
+        "title": "", 
+        "description": "Dummmy", 
+        "category": "", 
+        "complexity": ""
       };
 
     const [questions, setQuestions] = useState([]);
+    const [formData, setFormData] = useState(Question);
+    const [editIndex, setEditIndex] = useState(-1);
 
-    const BASE_URL = process.env.BASE_URL || 'http://localhost:8080'
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            // Send a POST request to your API with the formData
+            const BASE_URL = 'http://localhost:8080';
+
+            console.log(formData)
+            const response = await axios.post(`${BASE_URL}/api/v1/questions`, formData);
+
+            if (response.status === 200) {
+                // Question added successfully, update questions state
+                const newQuestion = response.data; // Assuming your API returns the newly created question
+                setQuestions([...questions, newQuestion]);
+
+                // Clear the form
+                setFormData(Question);
+            }
+        } catch (error) {
+            console.error('Error adding question:', error.message);
+        }
+    };
 
     useEffect(() => {
         const fetchData = async () => {
@@ -39,12 +70,43 @@ export default function Homepage() {
         fetchData();
       }, []);
 
-    const handleDelete = (index) => {
-        /* const updatedQuestions = [...questions];
-        updatedQuestions.splice(index, 1);
-        setQuestions(updatedQuestions);
-        localStorage.setItem("questions", JSON.stringify(updatedQuestions)); */
+    const handleDelete = async (index) => {
+        const BASE_URL = 'http://localhost:8080';
+
+        console.log(index)
+        const response = await axios.delete(`${BASE_URL}/api/v1/questions/${index}`);
     };
+
+    const handleEdit = (index) => {
+        console.log("in edit", index)
+        setEditIndex(index)
+    }
+
+    const handleSave = () => {
+        // Save the changes to the questions array
+        const updatedQuestions = [...questions];
+        updatedQuestions[editIndex] = editedQuestion; // Use the editedQuestion state
+        setQuestions(updatedQuestions);
+        closeModal();
+    };
+
+    const handleEditClick = (index) => {
+        const questionToEdit = questions.find((question) => question.id === index); // Find the matching question
+        if (questionToEdit) {
+            setEditIndex(index);
+            setEditedQuestion(questionToEdit); // Set the currently edited question
+        }
+    };
+
+    const handleEditChange = (e, field) => {
+        const updatedQuestion = { ...editedQuestion };
+        updatedQuestion[field] = e.target.value;
+        setEditedQuestion(updatedQuestion);
+    };
+    
+    const closeModal = () => {
+        setEditIndex(-1)
+    }
 
     useEffect(() => {
         const name = localStorage.getItem('name');
@@ -52,6 +114,41 @@ export default function Homepage() {
             setStoredName(name)
         }
     }, []);
+
+    const renderEditModal = () => {
+        if (editIndex !== -1) {
+            const editedQuestion = questions.find((question) => question._id === editIndex); // Find the matching question
+
+            // const editedQuestion = questions[editIndex];
+            return (
+                <Modal
+                    isOpen={editIndex !== -1}
+                    onRequestClose={closeModal}
+                    contentLabel="Edit Question Modal"
+                >
+                    <h2>Edit Question</h2>
+                    <input
+                        type="text"
+                        value={editedQuestion.title}
+                        onChange={(e) => handleEditChange(e, 'title')}
+                    />
+                    <input
+                        type="text"
+                        value={editedQuestion.complexity}
+                        onChange={(e) => handleEditChange(e, 'complexity')}
+                    />
+                    <input
+                        type="text"
+                        value={editedQuestion.category}
+                        onChange={(e) => handleEditChange(e, 'category')}
+                    />
+                    <button onClick={handleSave}>Save</button>
+                    <button onClick={closeModal}>Cancel</button>
+                </Modal>
+            );
+        }
+        return null
+    }
 
     return (
         <div className="bg-white min-h-screen">
@@ -85,6 +182,48 @@ export default function Homepage() {
                 </div>
             </IconContext.Provider>
             <p className="p-7 text-lg font-semibold mb-2">Welcome back, {storedName}</p>
+            <form onSubmit={handleSubmit} className="p-4">
+                <div>
+                    <label className="block text-xs text-gray-600 uppercase">Title</label>
+                    <input
+                        name="title"
+                        type="text"
+                        value={formData.title}
+                        onChange={handleChange}
+                        required
+                        className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
+                    />
+                </div>
+                <div>
+                    <label className="block text-xs text-gray-600 uppercase">Complexity</label>
+                    <input
+                        name="complexity"
+                        type="text"
+                        value={formData.complexity}
+                        onChange={handleChange}
+                        required
+                        className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
+                    />
+                </div>
+                <div>
+                    <label className="block text-xs text-gray-600 uppercase">Category</label>
+                    <input
+                        name="category"
+                        type="text"
+                        value={formData.category}
+                        onChange={handleChange}
+                        required
+                        className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-black focus:outline-none focus:ring-black sm:text-sm"
+                    />
+                </div>
+                <button
+                    type="submit"
+                    className="border-black bg-black text-white hover:bg-theme hover:text-black flex h-10 w-full items-center justify-center rounded-md border text-sm transition-all focus:outline-none"
+                >
+                    Add Question
+                </button>
+            </form>
+
             <div className="table-container">
                 <table className="min-w-full mx-5">
                     <caption className="text-lg font-semibold mb-2">Questions</caption>
@@ -95,13 +234,13 @@ export default function Homepage() {
                             <th className="py-2 text-left font-medium">Complexity</th>
                             <th className="py-2 text-left font-medium">Category</th>
                             <th className="py-2 text-left font-medium">Delete</th>
+                            <th className="py-2 text-left font-medium">Edit</th>
                         </tr>
                     </thead>
                     <tbody>
                         {questions && questions.map((question, index) => (
                             <tr
                                 key={index}
-                                onClick={() => handleQuestionClick(question)}
                                 className={index % 2 === 1 ? 'bg-theme bg-opacity-20' : 'bg-white'}
                             >
                                 <td className="py-1 pl-1">{index + 1}</td>
@@ -112,9 +251,18 @@ export default function Homepage() {
                                     <button
                                         className="delete-button bg-red-500 text-white px-3 py-1 rounded font-medium"
                                         data-index={index}
-                                        onClick={() => handleDelete(index)}
+                                        onClick={() => handleDelete(question._id)}
                                     >
                                         Delete
+                                    </button>
+                                </td>
+                                <td className="py-1">
+                                    <button
+                                        className="bg-green-500 text-white px-3 py-1 rounded font-medium"
+                                        data-index={index}
+                                        onClick={() => handleEdit(question._id)}
+                                    >
+                                        Edit
                                     </button>
                                 </td>
                             </tr>
@@ -122,6 +270,7 @@ export default function Homepage() {
                     </tbody>
                 </table>
             </div>
+            {renderEditModal()}
         </div>
     )
 }
