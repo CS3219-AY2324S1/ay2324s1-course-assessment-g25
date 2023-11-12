@@ -39,7 +39,7 @@ export default function SignIn() {
                     }
                 ).catch(
                     error => console.log(error),
-                    // setError('Email already registered!'),
+                    setError('Email already registered!'),
                 )
             }
 
