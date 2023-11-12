@@ -33,9 +33,8 @@ export default function Profile() {
             setStoredEmail(userEmail)
             setStoredId(id)
         }
+        console.log("hi" + userName, userEmail, id)
     })
-
-    
 
     const router = useRouter();
 
@@ -59,8 +58,7 @@ export default function Profile() {
 
     const handleDelete = async (e) => {
         e.preventDefault();
-
-        await axios.delete('http://localhost:8080/api/v1/users/' + id).then(
+        await axios.delete('http://localhost:8080/api/v1/users/' + storedId).then(
             (res) => {
                 console.log(res.data),
                     router.push('../sign_in')

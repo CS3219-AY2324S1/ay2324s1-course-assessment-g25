@@ -22,9 +22,16 @@ export default function SignIn() {
         e.preventDefault();
         // Perform login logic here
 
+        const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+        const emailValid = emailRegex.test(email);
+
         if (email !== '' && name !== '' && password !== '' && password2 !== '') {
             if (password !== password2) {
                 setError('Please check your password!')
+            } else if (password.length < 8) {
+                setError('Password must have at least 8 characters')
+            } else if (!emailValid) {
+                setError('Invalid email format')
             } else {
                 await axios.post('http://localhost:8080/api/v1/users', { name, email, password, password2 }).then(
                     (res) => {
@@ -50,7 +57,7 @@ export default function SignIn() {
     return (
         <div className="min-h-screen flex flex-col justify-center items-center bg-gray-300;">
             <div className="max-w-md px-6 py-8 bg-green-50 shadow-md rounded-lg;">
-                <h1 className="text-2xl mb-6 text-center font-semibold">Sign In</h1>
+                <h1 className="text-2xl mb-6 text-center font-semibold">Sign Up</h1>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4;">
                         <label className="block text-sm font-medium text-gray-700;">Name:</label>
