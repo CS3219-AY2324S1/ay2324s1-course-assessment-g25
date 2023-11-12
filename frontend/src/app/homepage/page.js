@@ -24,7 +24,8 @@ export default function Homepage() {
 
     const [questions, setQuestions] = useState([]);
     const [formData, setFormData] = useState(Question);
-    const [editIndex, setEditIndex] = useState(-1);
+    let [isOpen, setIsOpen] = useState(false)
+    const [editedQuestion, setEditedQuestion] = useState(Question);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -68,7 +69,7 @@ export default function Homepage() {
         };
     
         fetchData();
-      }, []);
+      }, [isOpen]);
 
     const handleDelete = async (index) => {
         const BASE_URL = 'http://localhost:8080';
@@ -77,16 +78,36 @@ export default function Homepage() {
         const response = await axios.delete(`${BASE_URL}/api/v1/questions/${index}`);
     };
 
-    const handleEdit = (index) => {
-        console.log("in edit", index)
-        setEditIndex(index)
+    function closeModal() {
+        setIsOpen(false)
     }
 
-    const handleSave = () => {
+    function openModal() {
+        console.log("open modal called")
+        setIsOpen(true)
+    }
+
+    const handleEdit = async (index) => {
+        // setModalOpen(true);
+        // setEditIndex(index)
+        setEditedQuestion(questions.find((question) => question._id === index))
+        openModal()
+        console.log("in edit", editedQuestion) 
+    }
+
+    const handleSave = async () => {
         // Save the changes to the questions array
-        const updatedQuestions = [...questions];
-        updatedQuestions[editIndex] = editedQuestion; // Use the editedQuestion state
-        setQuestions(updatedQuestions);
+        const BASE_URL = 'http://localhost:8080';
+        console.log("edited question", editedQuestion)
+
+        const putQuestion = {
+            "title": editedQuestion.title, 
+            "description": "Dummmy", 
+            "category": editedQuestion.category, 
+            "complexity": editedQuestion.complexity
+        }
+
+        const response = await axios.put(`${BASE_URL}/api/v1/questions/${editedQuestion._id}`, putQuestion);
         closeModal();
     };
 
@@ -103,10 +124,6 @@ export default function Homepage() {
         updatedQuestion[field] = e.target.value;
         setEditedQuestion(updatedQuestion);
     };
-    
-    const closeModal = () => {
-        setEditIndex(-1)
-    }
 
     useEffect(() => {
         const name = localStorage.getItem('name');
@@ -114,41 +131,6 @@ export default function Homepage() {
             setStoredName(name)
         }
     }, []);
-
-    const renderEditModal = () => {
-        if (editIndex !== -1) {
-            const editedQuestion = questions.find((question) => question._id === editIndex); // Find the matching question
-
-            // const editedQuestion = questions[editIndex];
-            return (
-                <Modal
-                    isOpen={editIndex !== -1}
-                    onRequestClose={closeModal}
-                    contentLabel="Edit Question Modal"
-                >
-                    <h2>Edit Question</h2>
-                    <input
-                        type="text"
-                        value={editedQuestion.title}
-                        onChange={(e) => handleEditChange(e, 'title')}
-                    />
-                    <input
-                        type="text"
-                        value={editedQuestion.complexity}
-                        onChange={(e) => handleEditChange(e, 'complexity')}
-                    />
-                    <input
-                        type="text"
-                        value={editedQuestion.category}
-                        onChange={(e) => handleEditChange(e, 'category')}
-                    />
-                    <button onClick={handleSave}>Save</button>
-                    <button onClick={closeModal}>Cancel</button>
-                </Modal>
-            );
-        }
-        return null
-    }
 
     return (
         <div className="bg-white min-h-screen">
@@ -223,6 +205,56 @@ export default function Homepage() {
                     Add Question
                 </button>
             </form>
+            <Modal isOpen={isOpen} onRequestClose={closeModal} contentLabel="Edit Question Modal" className="flex items-center">
+    <div className="bg-gray-200 w-full mx-auto p-4 rounded shadow-lg mx-4 my-20">
+        <h2 className="text-2xl font-semibold mb-4">Edit Question</h2>
+
+        <div className="mb-4">
+            <label className="block text-xs text-gray-600 uppercase mb-1">Title</label>
+            <input
+                type="text"
+                className="w-full border rounded px-3 py-2"
+                value={editedQuestion.title}
+                onChange={(e) => handleEditChange(e, 'title')}
+            />
+        </div>
+
+        <div className="mb-4">
+            <label className="block text-xs text-gray-600 uppercase mb-1">Complexity</label>
+            <input
+                type="text"
+                className="w-full border rounded px-3 py-2"
+                value={editedQuestion.complexity}
+                onChange={(e) => handleEditChange(e, 'complexity')}
+            />
+        </div>
+
+        <div className="mb-4">
+            <label className="block text-xs text-gray-600 uppercase mb-1">Category</label>
+            <input
+                type="text"
+                className="w-full border rounded px-3 py-2"
+                value={editedQuestion.category}
+                onChange={(e) => handleEditChange(e, 'category')}
+            />
+        </div>
+
+        <div className="flex justify-end">
+            <button
+                className="bg-blue-500 text-white rounded px-4 py-2 mr-2 hover:bg-blue-600"
+                onClick={handleSave}
+            >
+                Save
+            </button>
+            <button
+                className="bg-gray-300 text-gray-600 rounded px-4 py-2 hover:bg-gray-400"
+                onClick={closeModal}
+            >
+                Cancel
+            </button>
+        </div>
+    </div>
+</Modal>
 
             <div className="table-container">
                 <table className="min-w-full mx-5">
@@ -270,7 +302,6 @@ export default function Homepage() {
                     </tbody>
                 </table>
             </div>
-            {renderEditModal()}
         </div>
     )
 }
