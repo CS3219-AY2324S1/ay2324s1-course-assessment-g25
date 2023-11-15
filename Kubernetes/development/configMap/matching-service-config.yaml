@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: matching-service-config-dev
+  namespace: development
+data:
+  PORT: "8081"

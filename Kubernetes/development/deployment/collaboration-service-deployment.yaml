@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: collaboration-service-deployment-dev
+  namespace: development
+spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: collaboration-service
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
+        maxSurge: 1
+    template:
+      metadata:
+        labels:
+          app: collaboration-service
+      spec:
+        containers:
+        - image: wxy1203/collaboration-service:v0
+          name: collaboration-service-container
+          ports:
+          - containerPort: 3000
+          resources:
+            requests:
+              memory: "150Mi" # Request 150MB of memory
+              cpu: "100m" # Request 0.1 CPU
+            limits:
+              memory: "200Mi" # Limit memory to 200MB
+              cpu: "200m" # Limit CPU to 0.2 CPU
+          env:
+            - name: BASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: collaboration-service-config-dev
+                  key: BASE_URL
+            - name: LIVEBLOCKS_PUBLIC_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: collaboration-service-config-dev
+                  key: LIVEBLOCKS_PUBLIC_KEY
+            - name: LIVEBLOCKS_SECRET_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: collaboration-service-config-dev
+                  key: LIVEBLOCKS_SECRET_KEY
+            - name: NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: collaboration-service-config-dev
+                  key: NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY
+
+status: {} # Empty status section

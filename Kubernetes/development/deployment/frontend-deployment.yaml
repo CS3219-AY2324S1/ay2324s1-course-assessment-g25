@@ -1,0 +1,103 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment-dev
+  namespace: development
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      containers:
+      - image: wxy1203/frontend:v0
+        name: frontend-container
+        ports:
+        - containerPort: 3000
+        resources:
+          requests:
+            memory: "4Gi" # Request 3GB of memory
+            cpu: "700m" # Request 0.7 CPU
+          limits:
+            memory: "5Gi" # Limit memory to 4GB
+            cpu: "1000m" # Limit CPU to 1 CPU
+        env:
+          - name: PORT
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: PORT
+          - name: NODE_ENV
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: NODE_ENV
+          - name: BASE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: BASE_URL
+          - name: DATABASE_URL
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: DATABASE_URL
+          - name: NEXTAUTH_URL
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: NEXTAUTH_URL
+          - name: NEXTAUTH_SECRET
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: NEXTAUTH_SECRET
+          - name: GITHUB_ID
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: GITHUB_ID
+          - name: GITHUB_SECRET
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: GITHUB_SECRET
+          - name: LIVEBLOCKS_PUBLIC_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: LIVEBLOCKS_PUBLIC_KEY
+          - name: LIVEBLOCKS_SECRET_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: LIVEBLOCKS_SECRET_KEY
+          - name: NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY
+          - name: DISCORD_ID
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: DISCORD_ID
+          - name: DISCORD_SECRET
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: DISCORD_SECRET
+          - name: OPENAI_API_KEY
+            valueFrom:
+              configMapKeyRef:
+                name: frontend-config-dev
+                key: OPENAI_API_KEY
+ 
+
+status: {} # Empty status section

@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: collaboration-service-config-dev
+  namespace: development
+data:
+  BASE_URL: "http://localhost:8084"
+  LIVEBLOCKS_PUBLIC_KEY: pk_dev_5Yd-dPnAJf8sTFf7U0eZktFHa3Ndytq_XrzK-Obj0fd1GUSxiSy4s2Ef_LVeghRI
+  LIVEBLOCKS_SECRET_KEY: sk_dev_UL-Q6euShRYS0pkEILb7TYvHBVaMPcXq_IIn_DrbYWdxgMZ-wXeplo8KQY96Z6lJ
+  NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY: pk_dev_5Yd-dPnAJf8sTFf7U0eZktFHa3Ndytq_XrzK-Obj0fd1GUSxiSy4s2Ef_LVeghRI

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: question-service-deployment-dev
+  namespace: development
+spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: question-service
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxUnavailable: 1
+        maxSurge: 1
+    template:
+      metadata:
+        labels:
+          app: question-service
+      spec:
+        containers:
+        - image: wxy1203/question-service:v0
+          name: question-service-container
+          ports:
+          - containerPort: 8084
+          resources:
+            requests:
+              memory: "150Mi" # Request 150MB of memory
+              cpu: "100m" # Request 0.1 CPU
+            limits:
+              memory: "200Mi" # Limit memory to 200MB
+              cpu: "200m" # Limit CPU to 0.2 CPU
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: question-service-config-dev
+                  key: PORT
+            - name: MONGODB_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: question-service-config-dev
+                  key: MONGODB_URI
+
+status: {} # Empty status section

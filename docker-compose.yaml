@@ -1,0 +1,71 @@
+# For local development purposes only
+
+version: "3.8"
+
+services:
+
+  frontend:
+    build: ./frontend
+    container_name: frontend_container
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    stdin_open: true
+    tty: true
+    environment:
+    - NEXTAUTH_URL=http://localhost:3000
+    - NEXTAUTH_SECRET=wbb33dOF5jxX1s8Y7gXhEdIgD/zCzwRt659+0YIEgEo=
+    - GITHUB_ID=4e29058a74f57c9fd62a
+    - GITHUB_SECRET=18688aafe7221621dc420439cfe1ca753b9fb5c6
+    - DISCORD_ID=1170997238542123050
+    - DISCORD_SECRET=C8pMwHVkHhzh-IjdkuYXJRuGCpcXrXpV
+    - LIVEBLOCKS_PUBLIC_KEY=pk_dev_5Yd-dPnAJf8sTFf7U0eZktFHa3Ndytq_XrzK-Obj0fd1GUSxiSy4s2Ef_LVeghRI
+    - LIVEBLOCKS_SECRET_KEY=sk_dev_UL-Q6euShRYS0pkEILb7TYvHBVaMPcXq_IIn_DrbYWdxgMZ-wXeplo8KQY96Z6lJ
+    - NEXT_PUBLIC_LIVEBLOCKS_PUBLIC_KEY=pk_dev_5Yd-dPnAJf8sTFf7U0eZktFHa3Ndytq_XrzK-Obj0fd1GUSxiSy4s2Ef_LVeghRI
+
+
+  collaboration-service:
+    build: ./collaboration-service
+    container_name: collaboration_service_container
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./collaboration-service:/app
+
+  user-service:
+    build: ./user-service
+    container_name: user_service_container
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./user-service:/app
+    environment:
+      - DATABASE_URL="postgres://postgres:group25@34.126.94.217:5432/postgres"=value
+    depends_on:
+      - frontend
+
+  question-service:
+    build: ./question-service
+    container_name: question_service_container
+    ports:
+      - "8084:8084"
+    volumes:
+      - ./question-service:/app
+  
+  matching-service:
+    build: ./matching-service
+    container_name: matching_service_container
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./matching-service:/app
+      
+  history-service:
+      build: ./history-service
+      container_name: history_service_container
+      ports:
+        - "8000:8000"
+      volumes:
+        - ./history-service:/app
+        

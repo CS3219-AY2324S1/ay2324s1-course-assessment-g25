@@ -1,0 +1,71 @@
+# The name key defines the name of the workflow.
+name: Question CI and Tests
+
+# The on key defines the events that triggers the workflow.
+on:
+  # The workflow_dispatch key defines a manual event,
+  # which allows you to run a workflow manually. 
+  workflow_dispatch:
+
+  # The push key defines a Git push event, 
+  # which triggers the workflow when you push commits to the repository.
+  push:
+    branches: [ branch-* ]
+  
+  # The pull_request key defines a Git pull request event,
+  # which triggers the workflow when you create or update a pull request.
+  pull_request:
+    branches: [ master ]
+
+# The jobs key defines a set of jobs that are run in parallel.
+jobs:
+  # This key defines the name of the job.
+  test-cases:
+    strategy:
+      matrix:
+        platform: [ ubuntu-latest, windows-latest, macos-latest ]
+        node-version: [ 18.x ]
+        # node-version: [14.x, 16.x, 18.x, 20.x]
+
+    # The runs-on key tells the job to run on a specific operating system.
+    runs-on: ${{ matrix.platform }}
+
+    # The env key sets environment variables for jobs and steps.
+    env:
+      working-directory: ./question-service
+    
+    # The steps key defines a sequence of tasks that will be executed by the job.
+    steps:
+      - name: Checkout
+      # The uses key tells the job to retrieve the action named actions/checkout. 
+      # This is an action that checks out your repository and downloads it to the runner, 
+      # allowing you to run actions against your code (such as testing tools). 
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        # This step uses the actions/setup-node action to install the specified 
+        # version of the Node.js software package on the runner, 
+        # which gives you access to the npm command.
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: ${{ env.working-directory }}/package-lock.json
+
+      - name: Install dependencies
+      # The run key tells the job to execute a command on the runner. 
+      # In this example, npm ci is used to install the npm software packages for the project.
+        run: npm ci
+        working-directory: ${{ env.working-directory }}
+
+      - name: Build
+        # This step runs the `build` script if there is one specified under the 
+      # `scripts` key in your `package.json` file.
+        run: npm run build --if-present
+        working-directory: ${{ env.working-directory }}
+
+      - name: Test
+      # This step runs the `test` script that is specified under the `scripts` 
+      # key in your `package.json` file.
+        run: npm test
+        working-directory: ${{ env.working-directory }}

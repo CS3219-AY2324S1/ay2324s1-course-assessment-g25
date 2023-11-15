@@ -1,0 +1,36 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+
+  # configMap
+  - ../development/configMap/collaboration-service-config.yaml
+  - ../development/configMap/frontend-config.yaml
+  - ../development/configMap/history-service-config.yaml
+  - ../development/configMap/matching-service-config.yaml
+  - ../development/configMap/question-service-config.yaml
+  - ../development/configMap/user-service-config.yaml
+
+  # deployment
+  - ../development/deployment/collaboration-service-deployment.yaml
+  - ../development/deployment/frontend-deployment.yaml
+  - ../development/deployment/history-service-deployment.yaml
+  - ../development/deployment/matching-service-deployment.yaml
+  - ../development/deployment/question-service-deployment.yaml
+  - ../development/deployment/user-service-deployment.yaml
+
+  # horizntal pod autoscaler
+  - ../development/HPA/collaboration-service-hpa.yaml
+  - ../development/HPA/frontend-hpa.yaml
+  - ../development/HPA/history-service-hpa.yaml
+  - ../development/HPA/matching-service-hpa.yaml
+  - ../development/HPA/question-service-hpa.yaml
+  - ../development/HPA/user-service-hpa.yaml
+
+  # services
+  - ../development/services/frontend.yaml
+  - ../development/services/collaboration-service.yaml
+  - ../development/services/history-service.yaml
+  - ../development/services/matching-service.yaml
+  - ../development/services/question-service.yaml
+  - ../development/services/user-service.yaml

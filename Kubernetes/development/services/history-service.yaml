@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: history-service
+    namespace: development
+spec:
+    selector:
+        app: history-serivce
+    ports:
+        - name: "history-serivce-port"
+          port: 8000
+          targetPort: 8000
+    type: NodePort
+status:
+    loadBalancer: {}
